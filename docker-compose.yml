@@ -1,6 +1,21 @@
 version: "3.7"
 services:
-  $$IMAGE_NAME$$:
+  dhcp:
     build: .
-    image: homecentr/$$IMAGE_NAME$$
-    restart: unless-stopped
+    image: homecentr/dhcp:local
+    environment:
+      PUID: "6065"
+      PGID: "6066"
+    volumes:
+      - ./example:/config
+    networks:
+      default:
+
+networks:
+  default:
+    driver: bridge
+    attachable: true
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.250.0/24"
