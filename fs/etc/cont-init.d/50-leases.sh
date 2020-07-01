@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv ash
 
-if [ ! -f "/leases/dhcp.leases" ]; then
-  touch "/leases/dhcp.leases"
+if [ ! -f "/leases/dhcpd.leases" ]; then
+  touch "/leases/dhcpd.leases"
 fi
 
 chown -R "$PUID:$PGID" "/leases"

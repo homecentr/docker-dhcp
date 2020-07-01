@@ -42,14 +42,14 @@ public class DhcpContainerRunningAsRootShould {
 
     @Test
     public void startDhcpdAsRootUid() throws Exception {
-        int uid = _container.getProcessUid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcp.leases -user root -group root");
+        int uid = _container.getProcessUid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcpd.leases -user root -group root");
 
         assertEquals(0, uid);
     }
 
     @Test
     public void startDhcpdAsRootGid() throws Exception {
-        int gid = _container.getProcessGid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcp.leases -user root -group root");
+        int gid = _container.getProcessGid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcpd.leases -user root -group root");
 
         assertEquals(0, gid);
     }
