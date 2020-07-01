@@ -42,14 +42,14 @@ public class DhcpContainerRunningAsNonRootRootShould {
 
     @Test
     public void startDhcpdAsNonRootUid() throws Exception {
-        int uid = _container.getProcessUid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcp.leases -user nonroot -group nonroot");
+        int uid = _container.getProcessUid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcpd.leases -user nonroot -group nonroot");
 
         assertEquals(7077, uid);
     }
 
     @Test
     public void startDhcpdAsNonRootGid() throws Exception {
-        int gid = _container.getProcessGid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcp.leases -user nonroot -group nonroot");
+        int gid = _container.getProcessGid("/usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcpd.leases -user nonroot -group nonroot");
 
         assertEquals(6066, gid);
     }
