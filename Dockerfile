@@ -1,4 +1,4 @@
-FROM homecentr/base:2.4.3-alpine
+FROM homecentr/base:3.0.0-alpine
 
 ENV DHCP_ARGS=""
 
