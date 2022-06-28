@@ -23,6 +23,7 @@ public class DhcpdConfig {
                 "}";
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
+            System.out.println("dhcpd.conf: " + configuration);
             bw.write(configuration);
         }
 
