@@ -1,10 +1,10 @@
-FROM homecentr/base:3.4.1-alpine
+FROM homecentr/base:3.4.2-alpine
 
 ENV DHCP_ARGS=""
 
 RUN apk add --no-cache \
-        dhcp=4.4.2-r1 \
-        libcap=2.27-r0 && \
+        dhcp=4.4.3-r0 \
+        libcap=2.64-r0 && \
     rm /etc/dhcp/dhcpd.conf.example && \
     mkdir /leases && \
     chmod 0777 /leases && \
