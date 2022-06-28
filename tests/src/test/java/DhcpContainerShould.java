@@ -56,6 +56,9 @@ public class DhcpContainerShould {
         Container.ExecResult result = _clientContainer.executeShellCommand("nmap --script broadcast-dhcp-discover");
 
         assertEquals(0, result.getExitCode());
+
+        System.out.println(result.getStdout());
+
         assertTrue(result.getStdout().contains("IP Offered:"));
     }
 }
