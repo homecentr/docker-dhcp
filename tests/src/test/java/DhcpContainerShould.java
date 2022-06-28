@@ -26,7 +26,9 @@ public class DhcpContainerShould {
 
     @BeforeClass
     public static void setUp() throws IOException {
-        Network network = Network.builder().build();
+        Network network = Network.builder()
+                .driver("bridge")
+                .build();
 
         DhcpdConfig config = DhcpdConfig.createFromNetwork(network);
 
@@ -54,7 +56,8 @@ public class DhcpContainerShould {
 
     @Test
     public void respondToDhcpDiscovery() throws IOException, InterruptedException {
-        System.out.println("IP: " + _clientContainer.executeShellCommand("ip addr").getStdout());
+        System.out.println("IP DHCP: " + _serverContainer.executeShellCommand("ip addr").getStdout());
+        System.out.println("IP CLIENT: " + _clientContainer.executeShellCommand("ip addr").getStdout());
 
         Container.ExecResult result = _clientContainer.executeShellCommand("nmap --script broadcast-dhcp-discover");
 
