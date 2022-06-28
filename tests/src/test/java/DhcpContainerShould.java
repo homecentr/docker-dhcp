@@ -26,7 +26,10 @@ public class DhcpContainerShould {
 
     @BeforeClass
     public static void setUp() throws IOException {
-        Network network = Network.builder().build();
+        Network network = Network.builder()
+            
+            .build();
+
         DhcpdConfig config = DhcpdConfig.createFromNetwork(network);
 
         _serverContainer = new GenericContainerEx<>(new DockerImageTagResolver())
