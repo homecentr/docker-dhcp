@@ -32,8 +32,11 @@ jobs:
       - name: Build Docker image
         run: docker build . -t ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}
 
+      - name: Docker version
+        run: docker --version
+
       - name: Test Docker image
-        run: cd tests && sudo --preserve-env gradle test --info -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}
+        run: cd tests && gradle test --info -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}
         env: # To allow downloading packages
           GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
