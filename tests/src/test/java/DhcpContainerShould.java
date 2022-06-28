@@ -33,11 +33,13 @@ public class DhcpContainerShould {
         DhcpdConfig config = DhcpdConfig.createFromNetwork(network);
 
         _serverContainer = new GenericContainerEx<>(new DockerImageTagResolver())
-                .withNetwork(network)
+                //.withNetwork(network)
+                .withNetworkMode("host")
                 .withFileSystemBind(config.getAbsolutePath(), "/config/dhcpd.conf")
                 .waitingFor(WaitEx.forLogMessage("(.*)Socket/fallback/fallback-net(.*)", 1));
 
         _clientContainer = new GenericContainerEx<>(HelperImages.DhcpClient())
+                .withNetworkMode("host")
                 .withCommand("sleep", "1000h")
                 .withNetwork(network);
 
