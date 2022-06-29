@@ -26,16 +26,24 @@ public class DhcpContainerShould {
 
     @BeforeClass
     public static void setUp() throws IOException {
-        Network network = Network.builder().build();
+        Network network = Network.builder()
+                .driver("bridge")
+                .build();
+
         DhcpdConfig config = DhcpdConfig.createFromNetwork(network);
 
         _serverContainer = new GenericContainerEx<>(new DockerImageTagResolver())
                 .withNetwork(network)
+                .withNetworkAliases("dhcp-server.docker")
+                //.withEnv("PUID", "0")
+                //.withEnv("PGID", "0")
                 .withFileSystemBind(config.getAbsolutePath(), "/config/dhcpd.conf")
-                .waitingFor(WaitEx.forLogMessage("(.*)Socket/fallback/fallback-net(.*)", 1));
+                .waitingFor(WaitEx.forLogMessage("(.*)fallback-net(.*)", 1));
 
         _clientContainer = new GenericContainerEx<>(HelperImages.DhcpClient())
                 .withCommand("sleep", "1000h")
+                //.withEnv("PUID", "0")
+                //.withEnv("PGID", "0")
                 .withNetwork(network);
 
         _serverContainer.start();
@@ -53,9 +61,24 @@ public class DhcpContainerShould {
 
     @Test
     public void respondToDhcpDiscovery() throws IOException, InterruptedException {
-        Container.ExecResult result = _clientContainer.executeShellCommand("nmap --script broadcast-dhcp-discover");
+        int retryCounter = 0;
+        int retryLimit = 10;
+        Container.ExecResult result = null;
 
-        assertEquals(0, result.getExitCode());
+        while(retryCounter < retryLimit) {
+             System.out.println("Attempting DHCP discovery...");
+
+             result = _clientContainer.executeShellCommand("nmap -p 67 --script broadcast-dhcp-discover");
+
+             if(result.getStdout().contains("IP Offered:")){
+                 break;
+             }
+
+             retryCounter++;
+
+             Thread.sleep(2000);
+        }
+
         assertTrue(result.getStdout().contains("IP Offered:"));
     }
 }
