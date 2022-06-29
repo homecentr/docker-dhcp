@@ -41,12 +41,6 @@ jobs:
           GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Scan with Phonito Security
-        uses: phonito/phonito-scanner-action@master
-        with:
-          image: ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}
-          phonito-token: '${{ secrets.PHONITO_TOKEN }}'      
-
       - name: Scan with Snyk
         uses: snyk/actions/docker@0.1.1
         env:
