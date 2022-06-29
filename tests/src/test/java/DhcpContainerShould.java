@@ -34,15 +34,16 @@ public class DhcpContainerShould {
 
         _serverContainer = new GenericContainerEx<>(new DockerImageTagResolver())
                 .withNetwork(network)
-                .withEnv("PUID", "0")
-                .withEnv("PGID", "0")
+                .withNetworkAliases("dhcp-server.docker")
+                //.withEnv("PUID", "0")
+                //.withEnv("PGID", "0")
                 .withFileSystemBind(config.getAbsolutePath(), "/config/dhcpd.conf")
-                .waitingFor(WaitEx.forLogMessage("(.*)Socket/fallback/fallback-net(.*)", 1));
+                .waitingFor(WaitEx.forLogMessage("(.*)fallback-net(.*)", 1));
 
         _clientContainer = new GenericContainerEx<>(HelperImages.DhcpClient())
                 .withCommand("sleep", "1000h")
-                .withEnv("PUID", "0")
-                .withEnv("PGID", "0")
+                //.withEnv("PUID", "0")
+                //.withEnv("PGID", "0")
                 .withNetwork(network);
 
         _serverContainer.start();
@@ -60,15 +61,23 @@ public class DhcpContainerShould {
 
     @Test
     public void respondToDhcpDiscovery() throws IOException, InterruptedException {
-        System.out.println("IP DHCP: " + _serverContainer.executeShellCommand("ip addr").getStdout());
-        System.out.println("IP CLIENT: " + _clientContainer.executeShellCommand("ip addr").getStdout());
+        int retryCounter = 0;
+        int retryLimit = 10;
+        Container.ExecResult result = null;
 
-        Container.ExecResult result = _clientContainer.executeShellCommand("nmap --script broadcast-dhcp-discover");
+        while(retryCounter < retryLimit) {
+             System.out.println("Attempting DHCP discovery...");
 
-        assertEquals(0, result.getExitCode());
+             result = _clientContainer.executeShellCommand("nmap -p 67 --script broadcast-dhcp-discover");
 
-        System.out.println("Nmap output:");
-        System.out.println(result.getStdout());
+             if(result.getStdout().contains("IP Offered:")){
+                 break;
+             }
+
+             retryCounter++;
+
+             Thread.sleep(2000);
+        }
 
         assertTrue(result.getStdout().contains("IP Offered:"));
     }
