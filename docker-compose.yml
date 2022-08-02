@@ -1,20 +1,12 @@
 version: "3.7"
 services:
-  image:
+  dhcp:
     build: .
-<<<<<<< Updated upstream
-    image: homecentr/dhcp:preview
-    volumes:
-      - ./example:/config
-    cap_add:
-      - "NET_RAW" # Required for LPF  
-=======
-    image: homecentr/dhcp:local
+    image: homecentr/dhcp:prev
     volumes:
       - ./example:/config
     cap_add:
       - "NET_RAW" # Required for LPF socket
->>>>>>> Stashed changes
       - "CAP_NET_BIND_SERVICE" # Required to bind on port < 1024
     cap_drop:
       - "ALL"
