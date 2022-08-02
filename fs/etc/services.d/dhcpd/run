@@ -1,7 +1,0 @@
-#!/usr/bin/with-contenv sh
-
-EXEC_USERNAME=$(getent passwd "$PUID" | cut -d: -f1)
-EXEC_GROUPNAME=$(getent group "$PGID" | cut -d: -f1)
-
-# Not executed via runas because dhcpd has its own logic of chowning files and switching user executing the process
-exec /usr/sbin/dhcpd -4 -f -cf /config/dhcpd.conf -lf /leases/dhcpd.leases -user "$EXEC_USERNAME" -group "$EXEC_GROUPNAME" $DHCP_ARGS
