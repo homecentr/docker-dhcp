@@ -6,7 +6,10 @@ if [ ! -f "/leases/dhcpd.leases" ]; then
   chmod 0777 /leases/dhcpd.leases
 fi
 
+<<<<<<< Updated upstream
 whoami
 ls -l /leases
 
+=======
+>>>>>>> Stashed changes
 exec "$@"
