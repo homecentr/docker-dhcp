@@ -15,9 +15,6 @@ RUN apt-get update && \
     chmod a+x /entrypoint.sh && \
     chown ${USER_UID}:${USER_GID} /var/lib/dhcp && \
     setcap 'CAP_NET_BIND_SERVICE,CAP_NET_RAW=+ep' /usr/sbin/dhcpd
-    # setcap 'cap_net_bind_service=+ep' /usr/sbin/dhcpd && \
-    # setcap 'cap_net_admin=+ep' /usr/sbin/dhcpd && \
-    # setcap 'cap_net_broadcast=+ep' /usr/sbin/dhcpd
 
 USER ${USER_UID}:${USER_GID}
 

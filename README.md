@@ -11,22 +11,7 @@
 
 ## Usage
 
-```yml
-version: "3.7"
-services:
-  dhcp:
-    image: homecentr/dhcp
-  network: host
-  volumes:
-    - ./example:/config
-```
-
-## Environment variables
-
-| Name | Default value | Description |
-|------|---------------|-------------|
-| PUID | 7077 | UID of the user dhcp should be running as. |
-| PGID | 7077 | GID of the user dhcp should be running as. |
+Please see the `docker-compose.yml`
 
 ## Exposed ports
 
@@ -49,6 +34,4 @@ services:
 The container is regularly scanned for vulnerabilities and updated. Further info can be found in the [Security tab](https://github.com/homecentr/docker-dhcp/security).
 
 ### Container user
-The container supports privilege drop. Even though the container starts as root, it will use the permissions only to perform the initial set up. The dhcp process runs as UID/GID provided in the PUID and PGID environment variables.
-
-:warning: Do not change the container user directly using the `user` Docker compose property or using the `--user` argument. This would break the privilege drop logic.
+The container uses UID:GID of 1000:1000 by default. Image must be rebuilt in case you need to use a different UID or GID due to file permissions.
