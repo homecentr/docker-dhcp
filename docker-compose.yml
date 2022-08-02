@@ -2,7 +2,7 @@ version: "3.7"
 services:
   dhcp:
     build: .
-    image: homecentr/dhcp:prev
+    image: homecentr/dhcp:preview
     volumes:
       - ./example:/config
     cap_add:
