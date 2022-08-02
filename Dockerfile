@@ -1,21 +1,30 @@
-FROM homecentr/base:3.4.2-alpine
+FROM debian
 
-ENV DHCP_ARGS=""
+ARG USER_UID=1000
+ARG USER_GID=1000
 
-RUN apk add --no-cache \
-        dhcp=4.4.3-r0 \
-        libcap=2.64-r0 && \
-    rm /etc/dhcp/dhcpd.conf.example && \
+COPY ./root/ /
+
+RUN apt-get update && \
+    apt install -y isc-dhcp-server libcap2-bin && \
+    addgroup --gid ${USER_GID} nonroot && \
+    adduser --uid ${USER_UID} --gid ${USER_GID} --no-create-home --disabled-password --gecos "" nonroot && \
     mkdir /leases && \
     chmod 0777 /leases && \
     mkdir /config && \
-    setcap 'cap_net_raw+ep' /usr/sbin/dhcpd && \
-    setcap 'cap_net_bind_service=+ep' /usr/sbin/dhcpd && \
-    deluser dhcp 
+    chmod a+x /entrypoint.sh && \
+    chown ${USER_UID}:${USER_GID} /var/lib/dhcp && \
+    setcap 'CAP_NET_BIND_SERVICE,CAP_NET_RAW=+ep' /usr/sbin/dhcpd
+    # setcap 'cap_net_bind_service=+ep' /usr/sbin/dhcpd && \
+    # setcap 'cap_net_admin=+ep' /usr/sbin/dhcpd && \
+    # setcap 'cap_net_broadcast=+ep' /usr/sbin/dhcpd
 
-COPY ./fs/ /
+USER ${USER_UID}:${USER_GID}
 
 EXPOSE 67/udp
 
 VOLUME /leases
 VOLUME /config
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "/usr/sbin/dhcpd", "-4", "-f", "-cf", "/config/dhcpd.conf", "-lf", "/leases/dhcpd.leases", "--no-pid" ]

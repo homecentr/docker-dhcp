@@ -1,13 +1,22 @@
 version: "3.7"
 services:
-  dhcp:
+  image:
     build: .
-    image: homecentr/dhcp:local
-    environment:
-      PUID: "6065"
-      PGID: "6066"
+    image: homecentr/dhcp:preview
     volumes:
       - ./example:/config
+    cap_add:
+      - "NET_RAW" # Required for LPF  
+      - "CAP_NET_BIND_SERVICE" # Required to bind on port < 1024
+    cap_drop:
+      - "ALL"
+    networks:
+      default:
+    tmpfs:
+    - /leases:mode=770,uid=1000,gid=1000
+
+  client:
+    build: ./tests
     networks:
       default:
 
