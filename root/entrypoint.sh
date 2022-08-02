@@ -6,7 +6,4 @@ if [ ! -f "/leases/dhcpd.leases" ]; then
   chmod 0777 /leases/dhcpd.leases
 fi
 
-whoami
-ls -l /leases
-
 exec "$@"

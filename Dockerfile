@@ -22,5 +22,4 @@ EXPOSE 67/udp
 VOLUME /leases
 VOLUME /config
 
-ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "/usr/sbin/dhcpd", "-4", "-f", "-cf", "/config/dhcpd.conf", "-lf", "/leases/dhcpd.leases", "--no-pid" ]
+ENTRYPOINT [ "/entrypoint.sh", "/usr/sbin/dhcpd", "-4", "-f", "-cf", "/config/dhcpd.conf", "-lf", "/leases/dhcpd.leases", "--no-pid" ]

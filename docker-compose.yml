@@ -6,7 +6,7 @@ services:
     volumes:
       - ./example:/config
     cap_add:
-      - "NET_RAW" # Required for LPF  
+      - "NET_RAW" # Required for LPF socket
       - "CAP_NET_BIND_SERVICE" # Required to bind on port < 1024
     cap_drop:
       - "ALL"
