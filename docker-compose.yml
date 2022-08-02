@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  dhcp:
+  image:
     build: .
     image: homecentr/dhcp:preview
     volumes:
